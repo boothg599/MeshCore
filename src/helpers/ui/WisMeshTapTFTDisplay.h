@@ -32,7 +32,7 @@ class WisMeshTapTFTDisplay : public DisplayDriver {
   uint16_t _color = TFT_WHITE;
 
 #ifdef WISMESH_TAP_TOUCH_ENABLE
-  RAK14014_FT6336U touch;
+  FT6336U touch;
   bool _touchReady = false;
 #endif
 

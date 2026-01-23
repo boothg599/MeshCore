@@ -25,7 +25,7 @@
 #define LOAD_GFXFF 1
 #define TFT_RGB_ORDER 0
 #define SPI_FREQUENCY 50000000
-#define TFT_SPI_PORT SPI1
+#define TFT_SPI_PORT SPI
 
 // Compatibility macro some code checks for
 #define ST7789_CS WB_SPI_CS
