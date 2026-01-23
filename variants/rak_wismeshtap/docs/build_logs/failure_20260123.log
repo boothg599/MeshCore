@@ -1,0 +1,35 @@
+Processing RAK_WisMesh_Tap_companion_radio_ble (platform: nordicnrf52; board: rak4631; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/nordicnrf52/rak4631.html
+PLATFORM: Nordic nRF52 (10.10.0) > WisCore RAK4631 Board
+HARDWARE: NRF52840 64MHz, 243KB RAM, 696KB Flash
+DEBUG: Current (jlink) External (jlink, stlink)
+PACKAGES: 
+ - framework-arduinoadafruitnrf52 @ 1.10700.0 (1.7.0) 
+ - framework-cmsis @ 2.50700.210515 (5.7.0) 
+ - tool-adafruit-nrfutil @ 1.503.0 (5.3) 
+ - tool-sreccat @ 1.164.0 (1.64) 
+ - toolchain-gccarmnoneeabi @ 1.70201.0 (7.2.1)
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 24 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- SPI @ 1.0
+|-- Wire @ 1.0
+|-- RadioLib @ 7.5.0
+|-- Crypto @ 0.4.0
+|-- RTClib @ 2.1.4
+|-- Melopero RV3028 @ 1.2.0
+|-- CayenneLPP @ 1.6.1
+|-- CustomLFS @ 0.2.1+sha.6aa1bfb
+|-- base64 @ 1.4.0
+|-- Adafruit Internal File System on Bluefruit nRF52 @ 0.11.0
+|-- Adafruit Bluefruit nRF52 Libraries
+|-- ed25519
+|-- Adafruit Little File System Libraries @ 0.11.0
+Building in release mode
+Compiling .pio/build/RAK_WisMesh_Tap_companion_radio_ble/examples/companion_radio/MyMesh.cpp.o
+Compiling .pio/build/RAK_WisMesh_Tap_companion_radio_ble/examples/companion_radio/main.cpp.o
+
