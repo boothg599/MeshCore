@@ -10,11 +10,11 @@
 #endif
 
 #ifndef WISMESH_TAP_TFT_W
-  #define WISMESH_TAP_TFT_W 240
+  #define WISMESH_TAP_TFT_W 320
 #endif
 
 #ifndef WISMESH_TAP_TFT_H
-  #define WISMESH_TAP_TFT_H 320
+  #define WISMESH_TAP_TFT_H 240
 #endif
 
 #ifndef WISMESH_TAP_TFT_ROTATION

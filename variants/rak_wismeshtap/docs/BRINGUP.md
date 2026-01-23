@@ -42,6 +42,8 @@ python3 -m platformio run -e RAK_WisMesh_Tap_companion_radio_ble_tft
 - `WISMESH_TAP_TFT_BL=21` - Backlight GPIO
 - `WISMESH_TAP_TFT_RST=9` - Reset GPIO (was incorrectly -1)
 - `WISMESH_TAP_TFT_PWR_EN=34` - Power enable GPIO (NEW)
+- `WISMESH_TAP_TFT_W=320`, `WISMESH_TAP_TFT_H=240` - UI geometry (landscape)
+- `TFT_SPI_PORT=SPI` - Force TFT_eSPI to use WB SPI bus
 
 ### BLE Control
 - `BLE_PIN_CODE=123456` - Enable BLE with PIN pairing
@@ -76,6 +78,7 @@ When `BRINGUP_MODE=1` is defined:
 3. BLE advertises as "MeshCoreTap_BRINGUP" unconditionally
 4. Continues even if TFT init fails
 5. 60-second minimum advertising window
+6. Logs and displays active BLE PIN
 
 **Pre-built BRINGUP environment:**
 ```bash
@@ -107,6 +110,10 @@ build_flags =
 2. Verify `serial_interface.begin()` is called
 3. Check `startAdv()` is reached (not blocked by TFT failure)
 4. Use `BLE_DEBUG_LOGGING=1` for debug output
+
+### BLE Pairing Notes
+- If `BLE_PIN_CODE=123456` and a display is present, firmware may choose a random 6-digit PIN each boot.
+- In BRINGUP_MODE, the active PIN is logged on Serial and shown on-screen.
 
 ### Device Not Booting
 1. Check for hard fault (LED patterns)

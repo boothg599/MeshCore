@@ -201,6 +201,22 @@ void setup() {
     #endif
   );
 
+#ifdef BRINGUP_MODE
+  BRINGUP_LOG_VAL("BLE PIN: ", the_mesh.getBLEPin());
+  if (disp != NULL) {
+    char pin_buf[24];
+    snprintf(pin_buf, sizeof(pin_buf), "PIN: %06lu", (unsigned long)the_mesh.getBLEPin());
+    disp->startFrame(DisplayDriver::BLUE);
+    disp->setTextSize(2);
+    disp->setColor(DisplayDriver::LIGHT);
+    disp->setCursor(20, 80);
+    disp->print("BRINGUP OK");
+    disp->setCursor(20, 120);
+    disp->print(pin_buf);
+    disp->endFrame();
+  }
+#endif
+
 #ifdef BLE_PIN_CODE
   char dev_name[32+16];
   #ifdef BRINGUP_MODE

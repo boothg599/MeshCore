@@ -61,6 +61,7 @@ bool WisMeshTapTFTDisplay::begin() {
   }
 
   // Step 4: Initialize TFT controller
+  SPI.begin();
   display.init();
   display.setRotation(WISMESH_TAP_TFT_ROTATION);
   display.fillScreen(TFT_BLACK);

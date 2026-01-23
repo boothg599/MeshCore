@@ -38,6 +38,9 @@ void SerialBLEInterface::begin(const char* device_name, uint32_t pin_code) {
 
   Bluefruit.Security.setMITM(true);
   Bluefruit.Security.setPIN(charpin);
+#ifdef BRINGUP_MODE
+  BLE_DEBUG_PRINTLN("SerialBLEInterface: security MITM=1 PIN=%s", charpin);
+#endif
 
   Bluefruit.Periph.setConnectCallback(onConnect);
   Bluefruit.Periph.setDisconnectCallback(onDisconnect);
@@ -86,8 +89,13 @@ void SerialBLEInterface::startAdv() {
    * https://developer.apple.com/library/content/qa/qa1931/_index.html   
    */
   Bluefruit.Advertising.restartOnDisconnect(false); // don't restart automatically as we handle it in onDisconnect
+#ifdef BRINGUP_MODE
+  Bluefruit.Advertising.setInterval(32, 48);
+  Bluefruit.Advertising.setFastTimeout(0);       // keep fast interval in bringup
+#else
   Bluefruit.Advertising.setInterval(32, 244);
   Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
+#endif
   Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds
 
 }
