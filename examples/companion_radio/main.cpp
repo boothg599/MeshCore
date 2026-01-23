@@ -2,6 +2,15 @@
 #include <Mesh.h>
 #include "MyMesh.h"
 
+// BRINGUP_MODE: Early diagnostics for hardware bring-up
+#ifdef BRINGUP_MODE
+  #define BRINGUP_LOG(msg) Serial.println(F("[BRINGUP] " msg))
+  #define BRINGUP_LOG_VAL(msg, val) do { Serial.print(F("[BRINGUP] " msg)); Serial.println(val); } while(0)
+#else
+  #define BRINGUP_LOG(msg)
+  #define BRINGUP_LOG_VAL(msg, val)
+#endif
+
 // Believe it or not, this std C function is busted on some platforms!
 static uint32_t _atoi(const char* sp) {
   uint32_t n = 0;
@@ -108,12 +117,38 @@ void halt() {
 void setup() {
   Serial.begin(115200);
 
+#ifdef BRINGUP_MODE
+  delay(2000); // Allow serial to connect
+  BRINGUP_LOG("=== BRINGUP MODE ACTIVE ===");
+  BRINGUP_LOG("Starting board.begin()...");
+#endif
+
   board.begin();
+
+#ifdef BRINGUP_MODE
+  BRINGUP_LOG("board.begin() complete");
+#endif
 
 #ifdef DISPLAY_CLASS
   DisplayDriver* disp = NULL;
+#ifdef BRINGUP_MODE
+  BRINGUP_LOG("Starting display.begin()...");
+#endif
   if (display.begin()) {
     disp = &display;
+#ifdef BRINGUP_MODE
+    BRINGUP_LOG("display.begin() SUCCESS");
+    // BRINGUP: Fill screen with blue and show status
+    disp->startFrame(DisplayDriver::BLUE);
+    disp->setTextSize(2);
+    disp->setColor(DisplayDriver::LIGHT);
+    disp->setCursor(20, 100);
+    disp->print("BRINGUP OK");
+    disp->setCursor(20, 140);
+    disp->print("TFT Working!");
+    disp->endFrame();
+    delay(1000);
+#endif
     disp->startFrame();
   #ifdef ST7789
     disp->setTextSize(2);
@@ -121,9 +156,25 @@ void setup() {
     disp->drawTextCentered(disp->width() / 2, 28, "Loading...");
     disp->endFrame();
   }
+#ifdef BRINGUP_MODE
+  else {
+    BRINGUP_LOG("display.begin() FAILED");
+  }
+#endif
 #endif
 
-  if (!radio_init()) { halt(); }
+#ifdef BRINGUP_MODE
+  BRINGUP_LOG("Starting radio_init()...");
+#endif
+  if (!radio_init()) { 
+#ifdef BRINGUP_MODE
+    BRINGUP_LOG("radio_init() FAILED - halting");
+#endif
+    halt(); 
+  }
+#ifdef BRINGUP_MODE
+  BRINGUP_LOG("radio_init() complete");
+#endif
 
   fast_rng.begin(radio_get_rng_seed());
 
@@ -152,8 +203,17 @@ void setup() {
 
 #ifdef BLE_PIN_CODE
   char dev_name[32+16];
-  sprintf(dev_name, "%s%s", BLE_NAME_PREFIX, the_mesh.getNodeName());
+  #ifdef BRINGUP_MODE
+    // In BRINGUP_MODE, use fixed name for easy discovery
+    strcpy(dev_name, "MeshCoreTap_BRINGUP");
+    BRINGUP_LOG("Starting BLE with name: MeshCoreTap_BRINGUP");
+  #else
+    sprintf(dev_name, "%s%s", BLE_NAME_PREFIX, the_mesh.getNodeName());
+  #endif
   serial_interface.begin(dev_name, the_mesh.getBLEPin());
+  #ifdef BRINGUP_MODE
+    BRINGUP_LOG("BLE initialized, advertising started");
+  #endif
 #else
   serial_interface.begin(Serial);
 #endif

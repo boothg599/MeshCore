@@ -4,6 +4,14 @@
   #define WISMESH_TAP_TFT_BL (-1)
 #endif
 
+#ifndef WISMESH_TAP_TFT_PWR_EN
+  #define WISMESH_TAP_TFT_PWR_EN (-1)
+#endif
+
+#ifndef WISMESH_TAP_TFT_RST
+  #define WISMESH_TAP_TFT_RST (-1)
+#endif
+
 uint16_t WisMeshTapTFTDisplay::mapColor(Color c) const {
   switch (c) {
     case DARK:
@@ -30,11 +38,29 @@ bool WisMeshTapTFTDisplay::begin() {
     return true;
   }
 
+  // Step 1: Enable TFT power (WB_IO2 on RAK14014/RAK14015)
+  if (WISMESH_TAP_TFT_PWR_EN >= 0) {
+    pinMode(WISMESH_TAP_TFT_PWR_EN, OUTPUT);
+    digitalWrite(WISMESH_TAP_TFT_PWR_EN, HIGH);
+    delay(10); // Allow power to stabilize
+  }
+
+  // Step 2: Hardware reset if RST pin is configured
+  if (WISMESH_TAP_TFT_RST >= 0) {
+    pinMode(WISMESH_TAP_TFT_RST, OUTPUT);
+    digitalWrite(WISMESH_TAP_TFT_RST, LOW);
+    delay(10);
+    digitalWrite(WISMESH_TAP_TFT_RST, HIGH);
+    delay(120); // ST7789 needs 120ms after reset
+  }
+
+  // Step 3: Enable backlight
   if (WISMESH_TAP_TFT_BL >= 0) {
     pinMode(WISMESH_TAP_TFT_BL, OUTPUT);
     digitalWrite(WISMESH_TAP_TFT_BL, WISMESH_TAP_TFT_BL_ACTIVE);
   }
 
+  // Step 4: Initialize TFT controller
   display.init();
   display.setRotation(WISMESH_TAP_TFT_ROTATION);
   display.fillScreen(TFT_BLACK);
